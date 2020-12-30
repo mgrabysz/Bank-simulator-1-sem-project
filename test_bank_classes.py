@@ -11,15 +11,25 @@ from bank_classes import (
     installments_is_correct,
 )
 from decimal import Decimal
+from datetime import date
 import pytest
 
 
-def test_create_bank():
+def test_create_bank(monkeypatch):
+
+    def get_date_battle_of_grunwald():
+        return date(1410, 7, 15)
+    monkeypatch.setattr(
+        'bank_classes.get_first_day_of_month_date',
+        get_date_battle_of_grunwald
+        )
+
     bank = Bank()
     assert bank.budget() == Decimal('1000000')
     assert bank.clients_loans() == {}
     assert bank.clients_id() == {}
     assert bank.id_count == 1
+    assert bank.current_date == date(1410, 7, 15)
 
 
 def test_increase_budget_integer():
@@ -288,6 +298,35 @@ def test_collect_all_payments_multiple_times():
     assert bank.budget() == Decimal('1000064')
 
 
+def test_one_month_forward(monkeypatch):
+
+    def get_date_battle_of_grunwald():
+        return date(1410, 7, 15)
+    monkeypatch.setattr(
+        'bank_classes.get_first_day_of_month_date',
+        get_date_battle_of_grunwald
+        )
+
+    bank = Bank()
+    assert bank.current_date == date(1410, 7, 15)
+    bank.one_month_forward()
+    assert bank.current_date == date(1410, 8, 15)
+
+
+def test_one_month_forward_new_year(monkeypatch):
+    def get_date_mickiewicz_birthday():
+        return date(1798, 12, 24)
+    monkeypatch.setattr(
+        'bank_classes.get_first_day_of_month_date',
+        get_date_mickiewicz_birthday
+        )
+
+    bank = Bank()
+    assert bank.current_date == date(1798, 12, 24)
+    bank.one_month_forward()
+    assert bank.current_date == date(1799, 1, 24)
+
+
 def test_client_debt():
     bank = Bank()
     bank.give_loan_to_new_client('Emma Watson', 1200, 3, 1)
@@ -316,19 +355,6 @@ def test_info_about_clients():
         1: {'name': 'Emma Watson', 'debt': Decimal('1761.00')},
         2: {'name': 'Jose Arcadio Morales', 'debt': Decimal('1030.00')}
     }
-
-
-def test_info_about_clients_to_print():
-    bank = Bank()
-    bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
-    bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
-    bank.give_loan_to_bank_client(1, 500, 5, 1)
-    to_print = bank.info_about_clients_to_print()
-
-    assert to_print == ('ID - name - debt\n' +
-                        '1 - Emma Watson - 1761.00 zł\n' +
-                        '2 - Jose Arcadio Morales - 1030.00 zł\n'
-                        )
 
 
 def test_info_about_single_client():
@@ -360,3 +386,64 @@ def test_info_about_single_client():
         }
     }
     assert info == desired_info
+
+
+def test_make_monthly_settlement(monkeypatch):
+    def get_date_battle_of_grunwald():
+        return date(1410, 7, 15)
+    monkeypatch.setattr(
+        'bank_classes.get_first_day_of_month_date',
+        get_date_battle_of_grunwald
+        )
+
+    bank = Bank()
+    bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
+    bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
+    bank.give_loan_to_bank_client(1, 500, 5, 1)
+    emma = bank.clients_id()[1]
+    jose = bank.clients_id()[2]
+
+    assert bank.budget() == Decimal('997300')
+    assert bank.current_date == date(1410, 7, 15)
+
+    bank.make_monthly_settlement()
+
+    assert bank.budget() == Decimal('998958')
+    assert emma in bank.clients_loans()
+    assert jose not in bank.clients_loans()
+    emma_loans = bank.clients_loans()[emma]
+    assert len(emma_loans) == 1
+    assert bank.current_date == date(1410, 8, 15)
+
+
+def test_expected_income():
+    bank = Bank()
+    bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
+    bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
+    bank.give_loan_to_bank_client(1, 500, 5, 2)
+    expected_income = bank.expected_income()
+    assert expected_income == Decimal('1395.5')
+
+
+def test_general_info(monkeypatch):
+    def get_date_battle_of_grunwald():
+        return date(1410, 7, 15)
+    monkeypatch.setattr(
+        'bank_classes.get_first_day_of_month_date',
+        get_date_battle_of_grunwald
+        )
+    bank = Bank()
+    bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
+    bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
+    bank.give_loan_to_bank_client(1, 500, 5, 2)
+    general_info = bank.general_info()
+    desired_info = {
+        'budget': Decimal('997300'),
+        'date': date(1410, 7, 15),
+        'expected income': Decimal('1395.5'),
+        'clients info': {
+            1: {'name': 'Emma Watson', 'debt': Decimal('1761.00')},
+            2: {'name': 'Jose Arcadio Morales', 'debt': Decimal('1030.00')}
+        }
+    }
+    assert general_info == desired_info

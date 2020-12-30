@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import date
 
 
 class InvalidValueError(Exception):
@@ -56,6 +57,12 @@ def installments_is_correct(installments):
     return True
 
 
+def get_first_day_of_month_date():
+    my_date = date.today()
+    first_day = my_date.replace(day=1)
+    return first_day
+
+
 class Bank():
     """
     Class Bank. Contains attributes:
@@ -71,12 +78,16 @@ class Bank():
     :param id_count: this param increases by 1 with every created client
         to provide uniqueness of ID
     :type id_count: int
+
+    :param current_date: represents current date in the bank simulator
+    :type current_date: datetime.date
     """
     def __init__(self, budget=Decimal(1000000)):
         self._budget = budget
         self._clients_loans = {}
         self._clients_id = {}
         self.id_count = 1
+        self.current_date = get_first_day_of_month_date()
 
     def budget(self):
         return self._budget
@@ -177,6 +188,25 @@ class Bank():
         for client in clients_to_discard:
             del self._clients_loans[client]
 
+    def one_month_forward(self):
+        """
+        Changes current_date to one month forward
+        """
+        cur_date = self.current_date
+        if cur_date.month == 12:
+            forward = cur_date.replace(month=1, year=cur_date.year+1)
+        else:
+            forward = cur_date.replace(month=cur_date.month+1)
+        self.current_date = forward
+
+    def make_monthly_settlement(self):
+        """
+        1. Collects money from all clients
+        2. Changes date to next month
+        """
+        self.collect_all_payments()
+        self.one_month_forward()
+
     def client_debt(self, client):
         """
         Calcultes how much a client owes to the bank
@@ -203,39 +233,6 @@ class Bank():
             name_debt = {"name": name, "debt": debt}
             info_about_clients[id] = name_debt
         return info_about_clients
-
-    def info_about_clients_to_print(self):
-        """
-        Returns a string containing info about clients:
-            - id
-            - name
-            - debt
-        """
-        info = self.info_about_clients()
-        to_return = 'ID - name - debt\n'
-        for id, values in info.items():
-            name = values['name']
-            debt = values['debt']
-            to_return += f'{id} - {name} - {debt} zł\n'
-        return to_return
-
-    # def info_about_single_client(self, client):
-    #     """
-    #     Returns a string containing:
-    #         - client's ID
-    #         - client's name
-    #         - client's loans and its specification
-    #     """
-    #     id = client.id()
-    #     name = client.name()
-    #     loans = self.clients_loans()[client]
-    #     debt = bank.client_debt(client)
-    #     to_return = f'NAME: {name} ID: {id}\nTOTAL DEBT: {debt}\nLOANS:\n'
-    #     for loan in enumerate(loans):
-    #         rate = loan.rate()
-    #         installments = loan.installments()
-    #         payment = loan.payment
-    #         to_pay = payment * installments
 
     def info_about_single_client(self, client):
         """
@@ -276,6 +273,38 @@ class Bank():
             }
             single_client_info["loans info"][index + 1] = loan_info
         return single_client_info
+
+    def expected_income(self):
+        """
+        Returns expected income after current settlement period
+        """
+        clients_loans = self.clients_loans()
+        expected_income = Decimal(0)
+        for client, loans in clients_loans.items():
+            for loan in loans:
+                expected_income += loan.payment()
+        return expected_income
+
+    def general_info(self):
+        """
+        Returns dictionary according to scheme: {
+            'budget': self.budget(),
+            'date': self.current_date,
+            'expected income': self.expected_income()
+            'clients info': info_about_clients()
+        }
+        """
+        budget = self.budget()
+        current_date = self.current_date
+        expected_income = self.expected_income()
+        clients_info = self.info_about_clients()
+        general_info = {
+            'budget': budget,
+            'date': current_date,
+            'expected income': expected_income,
+            'clients info': clients_info
+        }
+        return general_info
 
 
 class Loan():
