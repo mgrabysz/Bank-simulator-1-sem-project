@@ -3,26 +3,25 @@
 # "ocznie", za to poprawność danych jest sprawdzana innymi testami należącymi
 # do modułu test_bank_classes
 
-from bank_classes import (
-    Bank,
-)
-# from datetime import date
-
 
 def clients_info_oneline(id, name, debt):
     line = f'{id:<3}| {name:24}| {debt:<9}\n'
     return line
 
 
-def info_about_clients_to_print(info):
-    to_return = 'ID | NAME' + (' ' * 20) + '| DEBT (zł)\n'
-    to_return += (40 * '-') + '\n'
-    for id, values in info.items():
-        name = values['name']
-        debt = values['debt']
-        line = clients_info_oneline(id, name, debt)
-        to_return += line
-    return to_return
+def info_about_clients_to_print(info_about_clients):
+    if info_about_clients:
+        to_return = 'ID | NAME' + (' ' * 20) + '| DEBT (zł)\n'
+        to_return += (40 * '-') + '\n'
+        for id, values in info_about_clients.items():
+            name = values['name']
+            debt = values['debt']
+            line = clients_info_oneline(id, name, debt)
+            to_return += line
+        return to_return
+    else:
+        to_return = "You do not have any client this month"
+        return to_return
 
 
 def info_about_single_client_to_print(single_client_info):
@@ -78,11 +77,28 @@ def general_info_to_print(general_info):
     return to_return
 
 
-bank = Bank()
-bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
-bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
-bank.give_loan_to_bank_client(1, 500, 5, 1)
+def greeting():
+    greeting = 'Welcome to The Bank Simulator!\n\n'
+    greeting += 'You just have inherited The Goodbank Company - '
+    greeting += 'a bank established by your beloved father,\n'
+    greeting += 'who with his titanic work managed to gather budget worth '
+    greeting += '1 000 000 zł\n\n'
+    greeting += 'You can now add new clients and give them loans.\n\n'
+    greeting += "The future of your father's legacy is in your hands!"
+    return greeting
 
-general_info = bank.general_info()
-to_print = general_info_to_print(general_info)
-print(to_print)
+
+def month_year(bank):
+    my_date = bank.current_date
+    month_year = my_date.strftime("%B %Y")
+    return month_year
+
+
+# bank = Bank()
+# bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
+# bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
+# bank.give_loan_to_bank_client(1, 500, 5, 1)
+
+# general_info = bank.general_info()
+# to_print = general_info_to_print(general_info)
+# print(to_print)
