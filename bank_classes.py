@@ -50,11 +50,24 @@ def installments_is_correct(installments):
     """
     Returns True if given installments is positive integer
     """
-    if type(installments) is not int:
+    if type(installments) is str:
+        try:
+            installments = int(installments)
+        except ValueError:
+            raise InvalidInstallmentsError
+    elif type(installments) is not int:
         raise InvalidInstallmentsError
+
     if installments < 1:
         raise InvalidInstallmentsError
     return True
+
+
+def name_is_correct(name):
+    if not name:
+        raise InvalidNameError
+    else:
+        return True
 
 
 def get_first_day_of_month_date():
@@ -336,7 +349,7 @@ class Loan():
             self._rate = Decimal(str(rate))
 
         if installments_is_correct(installments):
-            self._installments = installments
+            self._installments = int(installments)
 
         self._payment = self.calculate_payment()
 
@@ -379,9 +392,8 @@ class Client():
     :type id: int
     """
     def __init__(self, name, id):
-        self._name = str(name)
-        if self._name == '':
-            raise InvalidNameError
+        if name_is_correct(name):
+            self._name = str(name)
         self._id = id
 
     def name(self):

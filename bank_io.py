@@ -3,8 +3,22 @@
 # "ocznie", za to poprawność danych jest sprawdzana innymi testami należącymi
 # do modułu test_bank_classes
 
+from bank_classes import (
+    value_is_correct,
+    rate_is_correct,
+    installments_is_correct,
+    name_is_correct,
+    InvalidValueError,
+    InvalidRateError,
+    InvalidInstallmentsError,
+    InvalidNameError,
+)
+
 
 def clients_info_oneline(id, name, debt):
+    """
+    Returns one line string with info about client
+    """
     line = f'{id:<3}| {name:24}| {debt:<9}\n'
     return line
 
@@ -94,11 +108,57 @@ def month_year(bank):
     return month_year
 
 
-# bank = Bank()
-# bank.give_loan_to_new_client('Emma Watson', 1200, 3, 12)
-# bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
-# bank.give_loan_to_bank_client(1, 500, 5, 1)
+def take_correct_name_from_user():
+    """
+    Asks user for entering client name until input is correct
+    """
+    while True:
+        try:
+            name = input("Enter client's name: ")
+            if name_is_correct(name):
+                return name
+        except InvalidNameError:
+            print('Name cannot be empty')
+            continue
 
-# general_info = bank.general_info()
-# to_print = general_info_to_print(general_info)
-# print(to_print)
+
+def take_correct_value_from_user():
+    """
+    Asks user for entering loan value until input is correct
+    """
+    while True:
+        try:
+            value = input("Enter total value of the loan: ")
+            if value_is_correct(value):
+                return value
+        except InvalidValueError:
+            print('Value has to be positive number')
+            continue
+
+
+def take_correct_rate_from_user():
+    """
+    Asks user for entering loan rate until input is correct
+    """
+    while True:
+        try:
+            rate = input("Enter rate (e.g. '2' means 2% rate): ")
+            if rate_is_correct(rate):
+                return rate
+        except InvalidRateError:
+            print('Rate has to be a number from range [0, 100]')
+            continue
+
+
+def take_correct_installments_from_user():
+    """
+    Asks user for entering number of installments until input is correct
+    """
+    while True:
+        try:
+            installments = input("Enter number of monthly installments: ")
+            if installments_is_correct(installments):
+                return installments
+        except InvalidInstallmentsError:
+            print('Number of installments has to be a positive integer')
+            continue

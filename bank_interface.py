@@ -5,6 +5,10 @@ from bank_io import (
     general_info_to_print,
     greeting,
     month_year,
+    take_correct_name_from_user,
+    take_correct_value_from_user,
+    take_correct_rate_from_user,
+    take_correct_installments_from_user,
 )
 import sys
 
@@ -51,6 +55,9 @@ class Interface():
             elif action == '2' or action == 'info':
                 input_is_incorrect = False
                 self.display_general_info()
+            elif action == '3':
+                input_is_incorrect = False
+                self.give_a_new_loan()
 
     def display_general_info(self):
         """
@@ -107,9 +114,33 @@ class Interface():
             print('2. Display specific info about client')
             return
 
+    def give_a_new_loan(self):
+        """
+        User chooses betweend two options:
+        1. Give loan to a new client (create client)
+        2. Give loan to a client, who already has a loan
+        """
+        info_about_clients = self.bank.info_about_clients()
+        if not info_about_clients:
+            print('')
+            print("Finally! A client knocks on the door")
+            self.new_client_loan()
+
+    def new_client_loan(self):
+        name = take_correct_name_from_user()
+        value = take_correct_value_from_user()
+        rate = take_correct_rate_from_user()
+        installments = take_correct_installments_from_user()
+        self.bank.give_loan_to_new_client(
+                name,
+                value,
+                rate,
+                installments
+            )
+
 
 if __name__ == "__main__":
     bank = Bank()
-    bank.give_loan_to_new_client('Magda Grabysz', 1000, 2, 5)
+    # bank.give_loan_to_new_client('Magda Grabysz', 1000, 2, 5)
     interface = Interface(bank)
     interface.simulate()
