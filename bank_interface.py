@@ -58,6 +58,9 @@ class Interface():
             elif action == '3':
                 input_is_incorrect = False
                 self.give_a_new_loan()
+            elif action == '4':
+                input_is_incorrect = False
+                self.move_on_one_month()
 
     def display_general_info(self):
         """
@@ -137,6 +140,9 @@ class Interface():
                 rate,
                 installments
             )
+
+    def move_on_one_month(self):
+        bank.make_monthly_settlement()
 
 
 if __name__ == "__main__":

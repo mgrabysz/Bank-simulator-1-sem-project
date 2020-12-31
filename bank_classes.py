@@ -168,11 +168,13 @@ class Bank():
         """
         1. Increases bank budget by single payment
         2. Decreases loan.installments by 1
-        3. If loan.installments == 0, returns False. Otherwise returns True
+        3. Increases loan.inst_paid by 1
+        4. If loan.installments == 0, returns False. Otherwise returns True
         """
         payment = loan.payment()
         self.increase_budget(payment)
         loan.decrease_installments_by_one()
+        loan.increase_inst_paid_by_one()
         to_return = False if loan.installments() == 0 else True
         return to_return
 
@@ -227,9 +229,13 @@ class Bank():
         debt = Decimal(0)
         loans = self.clients_loans()[client]
         for loan in loans:
-            installments = loan.installments()
-            payment = loan.payment()
-            to_pay = installments * payment
+            value = loan.value()
+            rate = loan.rate()
+            inst_paid = loan.inst_paid()
+            norm_payment = loan.norm_payment()
+            total_value_to_pay = ((rate + 100) * value / 100)
+            total_value_to_pay = total_value_to_pay.quantize(Decimal('.01'))
+            to_pay = total_value_to_pay - (inst_paid * norm_payment)
             debt += to_pay
         return debt
 
@@ -333,8 +339,11 @@ class Loan():
     :param installments: number of installments left
     :type installments: int
 
-    :param payment: value of single payment
-    :type: Decimal
+    :param norm_payment: value of single payment
+    :type norm_payment: Decimal
+
+    :param inst_paid: number of installments paid
+    :type inst_paid: int
     """
     def __init__(self,
                  value,
@@ -351,18 +360,34 @@ class Loan():
         if installments_is_correct(installments):
             self._installments = int(installments)
 
-        self._payment = self.calculate_payment()
+        self._norm_payment = self.calculate_payment()
+        self._inst_paid = 0
 
     def calculate_payment(self):
         """
-        Calculates value of a single installment
+        Calculates value of a single installment.
         """
         rate = self.rate()
         value = self.value()
         installments = self.installments()
 
-        payment = (((rate + 100) * value / 100) / installments)
-        return payment.quantize(Decimal('.01'))
+        norm_payment = (((rate + 100) * value / 100) / installments)
+        return norm_payment.quantize(Decimal('.01'))
+
+    def calculate_last_payment(self):
+        """
+        Calculates value of last payment.
+        Last payment is greater or equal to previous payments
+        to make up for rounding innacuracy.
+        """
+        value = self.value()
+        rate = self.rate()
+        inst_paid = self.inst_paid()
+        norm_payment = self.norm_payment()
+        total_value_to_pay = ((rate + 100) * value / 100)
+        total_value_to_pay = total_value_to_pay.quantize(Decimal('.01'))
+        to_pay = total_value_to_pay - (inst_paid * norm_payment)
+        return to_pay
 
     def value(self):
         return self._value
@@ -379,8 +404,20 @@ class Loan():
     def decrease_installments_by_one(self):
         self._installments -= 1
 
+    def increase_inst_paid_by_one(self):
+        self._inst_paid += 1
+
+    def norm_payment(self):
+        return self._norm_payment
+
     def payment(self):
-        return self._payment
+        if self.installments() == 1:
+            return self.calculate_last_payment()
+        else:
+            return self.norm_payment()
+
+    def inst_paid(self):
+        return self._inst_paid
 
 
 class Client():
