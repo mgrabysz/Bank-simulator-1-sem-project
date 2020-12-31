@@ -1,0 +1,3 @@
+Tu będzie opis modułów
+
+Podczas pracy natrafiłem na błąd, wynikający z zaokrąglania. Przykładowo, klient ma do spłaty 100 zł w trzech ratach. Ponieważ może posługiwać się wartościami nie większymi niż jeden grosz, jedna rata wynosi 33.33 zł. Aby uniknąć straty w wysokości 1 grosza, przyjąłem założenie, że ostatnia rata jest obliczana na inny sposób tak, aby nadrobić wynikłą różnicę. W tym przypadku trzecia rata wyniesie nie 33.33 a 33.34 zł. W zależności od ilości rat, które zostały do zapłacenia, metoda klasy Loan self.payment() zwraca odpowiednią wartość.

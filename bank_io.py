@@ -72,7 +72,7 @@ def info_about_loan_to_print(single_client_info, number):
     to_return += f'RATE: {rate} %\n'
     to_return += f'INSTALMENTS LEFT: {installments}\n'
     to_return += f'SINGLE INSTALLMENT VALUE: {payment} zł\n'
-    to_return += f'VALUE LEFT TO PAY: {to_pay} zł\n'
+    to_return += f'VALUE LEFT TO PAY: {to_pay} zł'
     return to_return
 
 

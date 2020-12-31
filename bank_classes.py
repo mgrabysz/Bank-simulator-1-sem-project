@@ -281,7 +281,11 @@ class Bank():
             rate = loan.rate()
             installments = loan.installments()
             payment = loan.payment()
-            to_pay = installments * payment
+            norm_payment = loan.norm_payment()
+            inst_paid = loan.inst_paid()
+            total_value_to_pay = ((rate + 100) * value / 100)
+            total_value_to_pay = total_value_to_pay.quantize(Decimal('.01'))
+            to_pay = total_value_to_pay - (inst_paid * norm_payment)
 
             loan_info = {
                 'value': value,
