@@ -1,23 +1,15 @@
-Stwórz symulator banku. 
+Stwórz symulator banku.
 
-Wymagania 
+Wymagania
 
-Budżet banku to 1 mln zł. 
+Budżet banku to 1 mln zł.
 
-Bank ma listę klientów, każdy z klientów bierze kredyty na różne kwoty z różnym oprocentowaniem. 
+Bank ma listę klientów, każdy z klientów bierze kredyty na różne kwoty z różnym oprocentowaniem.
 
-Upraszczamy warunki kredytu, jedyną zmienną jest oprocentowanie kredytu i liczba rat, zakładamy, że klienci regularnie spłacają raty kredytów. 
+Upraszczamy warunki kredytu, jedyną zmienną jest oprocentowanie kredytu i liczba rat, zakładamy, że klienci regularnie spłacają raty kredytów.
 
-Przykładowo, pożyczka na 10 tys zł na 10 miesięcy z oprocentowaniem 10% to 10 rat po 1100 zł. 
+Przykładowo, pożyczka na 10 tys zł na 10 miesięcy z oprocentowaniem 10% to 10 rat po 1100 zł.
 
-Aplikacja posiada tryb interaktywny oraz tryb wczytania danych z pliku. 
+Aplikacja posiada tryb interaktywny oraz tryb wczytania danych z pliku.
 
-Aplikacja umożliwia przyśpieszenie czasu, np. wypełniamy dane, przyśpieszamy o 5 miesięcy i sprawdzamy stany zadłużenia klientów i stan konta banku. 
-
- 
- Notatki po konsultacji
- 1. Pożyczka ma nic nie wiedzieć o banku
- 2. Bank ma mieć metodę pozwalającą na tworzenie klientów 
- 3. Przechowywać budżet najlepiej w groszach i przyjąć sobie jakąś dokładność (można poszukać na necie czy są jakieś biblioteki pod to)
- 4. Bank ma też tworzyć pożyczki, w ogóle szefem być
- 5. Klient może wziąć dużo pożyczek, na zdrowie
+Aplikacja umożliwia przyśpieszenie czasu, np. wypełniamy dane, przyśpieszamy o 5 miesięcy i sprawdzamy stany zadłużenia klientów i stan konta banku.

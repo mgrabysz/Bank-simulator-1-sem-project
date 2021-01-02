@@ -25,7 +25,7 @@ def clients_info_oneline(id, name, debt):
 
 def info_about_clients_to_print(info_about_clients):
     if info_about_clients:
-        to_return = 'ID | NAME' + (' ' * 20) + '| DEBT (zł)\n'
+        to_return = 'ID | NAME' + (' ' * 20) + '| DEBT (PLN)\n'
         to_return += (40 * '-') + '\n'
         for id, values in info_about_clients.items():
             name = values['name']
@@ -47,13 +47,13 @@ def info_about_single_client_to_print(single_client_info):
     to_return = 'Information about client:\n'
     to_return += f'ID: {id}\n'
     to_return += f'NAME: {name}\n'
-    to_return += f'TOTAL DEBT: {total_debt} zł\n'
+    to_return += f'TOTAL DEBT: {total_debt} PLN\n'
     to_return += f'NUMBER OF CURRENT LOANS: {loan_number}\n'
     for index, loan in loans_info.items():
         pay = loan['left to pay']
         num = loan['installments']
         inst = 'installment' if num == 1 else 'installments'
-        to_return += f'{index}. {pay} zł left to pay in {num} {inst}\n'
+        to_return += f'{index}. {pay} PLN left to pay in {num} {inst}\n'
     return to_return
 
 
@@ -68,11 +68,11 @@ def info_about_loan_to_print(single_client_info, number):
     to_pay = loan['left to pay']
 
     to_return = f'OWNER: {name}\n'
-    to_return += f'TOTAL VALUE: {value} zł\n'
+    to_return += f'TOTAL VALUE: {value} PLN\n'
     to_return += f'RATE: {rate} %\n'
     to_return += f'INSTALMENTS LEFT: {installments}\n'
-    to_return += f'SINGLE INSTALLMENT VALUE: {payment} zł\n'
-    to_return += f'VALUE LEFT TO PAY: {to_pay} zł'
+    to_return += f'SINGLE INSTALLMENT VALUE: {payment} PLN\n'
+    to_return += f'VALUE LEFT TO PAY: {to_pay} PLN'
     return to_return
 
 
@@ -83,8 +83,8 @@ def general_info_to_print(general_info):
     expected_income = general_info['expected income']
     clients_info = general_info['clients info']
     to_return = f'SETTLEMENT PERIOD: {period}\n'
-    to_return += f'BUDGET: {budget} zł\n'
-    to_return += f'EXPECTED INCOME: {expected_income} zł\n'
+    to_return += f'BUDGET: {budget} PLN\n'
+    to_return += f'EXPECTED INCOME: {expected_income} PLN\n'
     to_return += 'INFO ABOUT CLIENTS:\n'
     clients = info_about_clients_to_print(clients_info)
     to_return += clients
@@ -95,11 +95,18 @@ def greeting():
     greeting = 'Welcome to The Bank Simulator!\n\n'
     greeting += 'You just have inherited The Goodbank Company - '
     greeting += 'a bank established by your beloved father,\n'
-    greeting += 'who with his titanic work managed to gather budget worth '
-    greeting += '1 000 000 zł\n\n'
+    greeting += 'who with his titanic work managed to gather budget of '
+    greeting += '1,000,000 PLN\n\n'
     greeting += 'You can now add new clients and give them loans.\n\n'
     greeting += "The future of your father's legacy is in your hands!"
     return greeting
+
+
+def game_over():
+    game_over = '\nYour careless politics has led to total bankruptcy... '
+    game_over += 'Your father must be spinning in his grave!\n'
+    game_over += 'Thank you for using The Bank Simulator'
+    return game_over
 
 
 def month_year(bank):

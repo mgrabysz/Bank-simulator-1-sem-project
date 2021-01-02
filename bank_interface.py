@@ -4,12 +4,14 @@ from bank_io import (
     info_about_clients_to_print,
     general_info_to_print,
     greeting,
+    game_over,
     month_year,
     take_correct_name_from_user,
     take_correct_value_from_user,
     take_correct_rate_from_user,
     take_correct_installments_from_user,
 )
+from bank_classes import NoBudgetError
 import sys
 
 
@@ -27,10 +29,15 @@ class Interface():
         1. Starts simulation
         2. Prints welcome
         3. Moves to main_menu()
+        4. In case of NoBudgetError, stops simulating
         """
         print(greeting())
-        while True:
-            self.main_menu()
+        try:
+            while True:
+                self.main_menu()
+        except NoBudgetError:
+            print(game_over())
+            sys.exit()
 
     def main_menu(self):
         """
@@ -55,6 +62,7 @@ class Interface():
         while input_is_incorrect:
             action = input('> ')
             if action == '1':
+                print('\nThank you for using The Bank Simulator')
                 sys.exit()
             elif action == '2' or action == 'info':
                 input_is_incorrect = False

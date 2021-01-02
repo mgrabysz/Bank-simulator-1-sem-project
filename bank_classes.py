@@ -18,6 +18,10 @@ class InvalidNameError(Exception):
     pass
 
 
+class NoBudgetError(Exception):
+    pass
+
+
 def value_is_correct(value):
     """
     Returns True if given value is a positive number
@@ -115,7 +119,6 @@ class Bank():
         var = self._budget
         self._budget = self._budget.quantize(Decimal('.01'))
         var.quantize(Decimal('.01'))
-        pass
 
     def decrease_budget(self, value):
         """
@@ -125,7 +128,8 @@ class Bank():
         value = str(value)
         self._budget -= Decimal(value)
         self._budget = self._budget.quantize(Decimal('.01'))
-        pass
+        if self.budget() <= 0:
+            raise NoBudgetError
 
     def clients_loans(self):
         return self._clients_loans
