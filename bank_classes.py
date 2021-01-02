@@ -78,12 +78,6 @@ def name_is_correct(name):
         return True
 
 
-def get_first_day_of_month_date():
-    my_date = date.today()
-    first_day = my_date.replace(day=1)
-    return first_day
-
-
 class Bank():
     """
     Class Bank. Contains attributes:
@@ -108,7 +102,12 @@ class Bank():
         self._clients_loans = {}
         self._clients_id = {}
         self.id_count = 1
-        self.current_date = get_first_day_of_month_date()
+        self.current_date = self.get_first_day_of_month_date()
+
+    def get_first_day_of_month_date(self):
+        my_date = date.today()
+        first_day = my_date.replace(day=1)
+        return first_day
 
     def budget(self):
         return self._budget

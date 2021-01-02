@@ -1,4 +1,4 @@
-# Świadomie zrezygnowałem z testowania niektórych funkcji z tego modułu.
+# Świadomie zrezygnowałem z testowania większości funkcji z tego modułu.
 # Zwracają wielolinijkowe stringi, których układ łatwiej jest przejrzeć
 # "ocznie", za to poprawność danych jest sprawdzana innymi testami należącymi
 # do modułu test_bank_classes
@@ -29,6 +29,9 @@ def clients_info_oneline(id, name, debt):
 
 
 def info_about_clients_to_print(info_about_clients):
+    """
+    Returns info about all clients as multi-line, user-friendly string
+    """
     if info_about_clients:
         to_return = 'ID | NAME' + (' ' * 20) + '| DEBT (PLN)\n'
         to_return += (40 * '-') + '\n'
@@ -228,6 +231,9 @@ def read_from_csv(file_handle):
 
 
 def load_from_file(path):
+    """
+    Loads data from file
+    """
     with open(path, 'r') as file_handle:
         initial_loans = read_from_csv(file_handle)
     return initial_loans
