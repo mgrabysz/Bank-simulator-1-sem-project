@@ -13,6 +13,11 @@ from bank_classes import (
     InvalidInstallmentsError,
     InvalidNameError,
 )
+import csv
+
+
+class MalformedDataError(Exception):
+    pass
 
 
 def clients_info_oneline(id, name, debt):
@@ -39,6 +44,9 @@ def info_about_clients_to_print(info_about_clients):
 
 
 def info_about_single_client_to_print(single_client_info):
+    """
+    Returns info about single client as multi-line, user-friendly string
+    """
     id = single_client_info['id']
     name = single_client_info['name']
     total_debt = single_client_info['total debt']
@@ -58,6 +66,9 @@ def info_about_single_client_to_print(single_client_info):
 
 
 def info_about_loan_to_print(single_client_info, number):
+    """
+    Returns info about single loan as multi-line, user-friendly string
+    """
     name = single_client_info['name']
     loans_info = single_client_info['loans info']
     loan = loans_info[number]
@@ -77,6 +88,9 @@ def info_about_loan_to_print(single_client_info, number):
 
 
 def general_info_to_print(general_info):
+    """
+    Returns general info as multi-line, user-friendly string
+    """
     budget = general_info['budget']
     cur_date = general_info['date']
     period = cur_date.strftime("%B %Y")
@@ -92,6 +106,9 @@ def general_info_to_print(general_info):
 
 
 def greeting():
+    """
+    Returns greeting text
+    """
     greeting = 'Welcome to The Bank Simulator!\n\n'
     greeting += 'You just have inherited The Goodbank Company - '
     greeting += 'a bank established by your beloved father,\n'
@@ -103,6 +120,9 @@ def greeting():
 
 
 def game_over():
+    """
+    Returns text informing about bankruptcy
+    """
     game_over = '\nYour careless politics has led to total bankruptcy... '
     game_over += 'Your father must be spinning in his grave!\n'
     game_over += 'Thank you for using The Bank Simulator'
@@ -110,6 +130,9 @@ def game_over():
 
 
 def month_year(bank):
+    """
+    Returns date in format 'April 1999'
+    """
     my_date = bank.current_date
     month_year = my_date.strftime("%B %Y")
     return month_year
@@ -169,3 +192,42 @@ def take_correct_installments_from_user():
         except InvalidInstallmentsError:
             print('Number of installments has to be a positive integer')
             continue
+
+
+def read_from_csv(file_handle):
+    """
+    Reads data from csv file handle and returs a list of dictionaries
+    """
+    initial_loans = []
+    reader = csv.DictReader(file_handle)
+    try:
+        for row in reader:
+            initial_loan = {}
+            name = None if row['name'] == '[previous]' else row['name']
+            value = row['value']
+            rate = row['rate']
+            installments = row['installments']
+            new_or_not = False if row['name'] == '[previous]' else True
+            initial_loan['new or not'] = new_or_not
+
+            # Checking if data is correct
+            value_is_correct(value)
+            rate_is_correct(rate)
+            installments_is_correct(installments)
+            if initial_loan['new or not'] is True:
+                name_is_correct(name)
+
+            initial_loan['name'] = name
+            initial_loan['value'] = value
+            initial_loan['rate'] = rate
+            initial_loan['installments'] = installments
+            initial_loans.append(initial_loan)
+    except (csv.Error, KeyError) as e:
+        raise MalformedDataError(str(e))
+    return initial_loans
+
+
+def load_from_file(path):
+    with open(path, 'r') as file_handle:
+        initial_loans = read_from_csv(file_handle)
+    return initial_loans

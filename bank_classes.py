@@ -3,19 +3,23 @@ from datetime import date
 
 
 class InvalidValueError(Exception):
-    pass
+    def __init__(self):
+        super().__init__("Invalid value detected")
 
 
 class InvalidRateError(Exception):
-    pass
+    def __init__(self):
+        super().__init__("Invalid rate detected")
 
 
 class InvalidInstallmentsError(Exception):
-    pass
+    def __init__(self):
+        super().__init__("Invalid installments number detected")
 
 
 class InvalidNameError(Exception):
-    pass
+    def __init__(self):
+        super().__init__("Name cannot be empty")
 
 
 class NoBudgetError(Exception):
@@ -332,6 +336,22 @@ class Bank():
             'clients info': clients_info
         }
         return general_info
+
+    def give_loans_from_initial_data(self, initial_loans):
+        """
+        This method is used when starting simulator with some initial data from
+        external file.
+        """
+        for initial_loan in initial_loans:
+            name = initial_loan['name']
+            value = initial_loan['value']
+            rate = initial_loan['rate']
+            installments = initial_loan['installments']
+            if initial_loan['new or not'] is True:
+                self.give_loan_to_new_client(name, value, rate, installments)
+            else:
+                id = self.id_count - 1
+                self.give_loan_to_bank_client(id, value, rate, installments)
 
 
 class Loan():

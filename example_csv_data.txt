@@ -1,0 +1,7 @@
+name,value,rate,installments
+Michael Scott,2000,4.5,10
+[previous],1000,2,5
+[previous], 10000,4,6
+Jim Halpert, 1500, 4, 10
+Pam Beesly, 500, 8, 8
+[previous], 1200, 2, 12

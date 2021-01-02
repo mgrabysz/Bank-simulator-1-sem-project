@@ -6,6 +6,7 @@ from bank_classes import (
     InvalidInstallmentsError,
     InvalidRateError,
     InvalidNameError,
+    NoBudgetError,
     value_is_correct,
     rate_is_correct,
     installments_is_correct,
@@ -364,7 +365,7 @@ def test_info_about_single_client():
     emma = bank.clients_id()[1]
     info = bank.info_about_single_client(emma)
 
-    desired_info = {
+    expected_info = {
         'id': 1,
         'name': 'Emma Watson',
         'total debt': Decimal('1761.00'),
@@ -385,7 +386,7 @@ def test_info_about_single_client():
             }
         }
     }
-    assert info == desired_info
+    assert info == expected_info
 
 
 def test_make_monthly_settlement(monkeypatch):
@@ -437,7 +438,7 @@ def test_general_info(monkeypatch):
     bank.give_loan_to_new_client('Jose Arcadio Morales', 1000, 3, 1)
     bank.give_loan_to_bank_client(1, 500, 5, 2)
     general_info = bank.general_info()
-    desired_info = {
+    expected_info = {
         'budget': Decimal('997300'),
         'date': date(1410, 7, 15),
         'expected income': Decimal('1395.5'),
@@ -446,4 +447,10 @@ def test_general_info(monkeypatch):
             2: {'name': 'Jose Arcadio Morales', 'debt': Decimal('1030.00')}
         }
     }
-    assert general_info == desired_info
+    assert general_info == expected_info
+
+
+def test_no_budget():
+    bank = Bank()
+    with pytest.raises(NoBudgetError):
+        bank.give_loan_to_new_client('Tom Hanks', 1200000, 4, 4)
