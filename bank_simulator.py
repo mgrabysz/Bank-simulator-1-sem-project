@@ -3,7 +3,8 @@ from bank_classes import (
     InvalidNameError,
     InvalidValueError,
     InvalidRateError,
-    InvalidInstallmentsError
+    InvalidInstallmentsError,
+    ToBigInstallmentsError
 )
 from bank_interface import Interface
 from bank_io import load_from_file, MalformedDataError
@@ -28,7 +29,8 @@ def main(arguments):
             InvalidValueError,
             InvalidRateError,
             InvalidInstallmentsError,
-            MalformedDataError
+            MalformedDataError,
+            ToBigInstallmentsError
         ) as e:
             print(e)
             print(f'File {path} contains invalid data')

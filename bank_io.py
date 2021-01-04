@@ -12,6 +12,7 @@ from bank_classes import (
     InvalidRateError,
     InvalidInstallmentsError,
     InvalidNameError,
+    ToBigInstallmentsError
 )
 import csv
 
@@ -165,7 +166,7 @@ def take_correct_value_from_user():
             if value_is_correct(value):
                 return value
         except InvalidValueError:
-            print('Value has to be positive number')
+            print('Value has to be at least equal 100')
             continue
 
 
@@ -183,17 +184,19 @@ def take_correct_rate_from_user():
             continue
 
 
-def take_correct_installments_from_user():
+def take_correct_installments_from_user(value):
     """
     Asks user for entering number of installments until input is correct
     """
     while True:
         try:
             installments = input("Enter number of monthly installments: ")
-            if installments_is_correct(installments):
+            if installments_is_correct(installments, value):
                 return installments
         except InvalidInstallmentsError:
             print('Number of installments has to be a positive integer')
+        except ToBigInstallmentsError:
+            print('This number of installments is too big')
             continue
 
 
@@ -223,7 +226,7 @@ def read_from_csv(file_handle):
             # Checking if data is correct
             value_is_correct(value)
             rate_is_correct(rate)
-            installments_is_correct(installments)
+            installments_is_correct(installments, value)
             if initial_loan['new or not'] is True:
                 name_is_correct(name)
 

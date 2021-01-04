@@ -22,17 +22,22 @@ class InvalidNameError(Exception):
         super().__init__("Name cannot be empty")
 
 
+class ToBigInstallmentsError(Exception):
+    def __init__(self):
+        super().__init__("Number of installments is to big for this value")
+
+
 class NoBudgetError(Exception):
     pass
 
 
 def value_is_correct(value):
     """
-    Returns True if given value is a positive number
+    Returns True if given value is a number equal or greater than 100
     """
     try:
         value = float(value)
-        if value > 0:
+        if value >= 100:
             return True
         else:
             raise InvalidValueError
@@ -54,9 +59,10 @@ def rate_is_correct(rate):
         raise InvalidRateError
 
 
-def installments_is_correct(installments):
+def installments_is_correct(installments, value):
     """
-    Returns True if given installments is positive integer
+    Returns True if given installments is positive integer not too big for
+    given value
     """
     if type(installments) is str:
         try:
@@ -68,6 +74,11 @@ def installments_is_correct(installments):
 
     if installments < 1:
         raise InvalidInstallmentsError
+
+    value = int(value)
+    if ((installments ** 2) > (200 * value)):
+        raise ToBigInstallmentsError
+
     return True
 
 
@@ -384,7 +395,7 @@ class Loan():
         if rate_is_correct(rate):
             self._rate = Decimal(str(rate))
 
-        if installments_is_correct(installments):
+        if installments_is_correct(installments, self._value):
             self._installments = int(installments)
 
         self._norm_payment = self.calculate_payment()

@@ -212,7 +212,7 @@ class Interface():
         name = take_correct_name_from_user()
         value = take_correct_value_from_user()
         rate = take_correct_rate_from_user()
-        installments = take_correct_installments_from_user()
+        installments = take_correct_installments_from_user(value)
         self.bank.give_loan_to_new_client(
                 name,
                 value,
@@ -252,7 +252,7 @@ class Interface():
 
         value = take_correct_value_from_user()
         rate = take_correct_rate_from_user()
-        installments = take_correct_installments_from_user()
+        installments = take_correct_installments_from_user(value)
 
         self.bank.give_loan_to_bank_client(id, value, rate, installments)
 

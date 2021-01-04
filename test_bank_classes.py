@@ -6,6 +6,7 @@ from bank_classes import (
     InvalidInstallmentsError,
     InvalidRateError,
     InvalidNameError,
+    ToBigInstallmentsError,
     NoBudgetError,
     value_is_correct,
     rate_is_correct,
@@ -84,6 +85,11 @@ def test_value_is_correct_string():
         value_is_correct('Little Mermaid')
 
 
+def test_value_is_correct_lesser_than_100():
+    with pytest.raises(InvalidValueError):
+        value_is_correct(66)
+
+
 def test_rate_is_correct():
     assert rate_is_correct(55.6) is True
 
@@ -104,22 +110,27 @@ def test_rate_is_correct_string():
 
 
 def test_installments_is_correct():
-    assert installments_is_correct(12) is True
+    assert installments_is_correct(12, 10000) is True
 
 
 def test_installments_is_correct_non_integer():
     with pytest.raises(InvalidInstallmentsError):
-        installments_is_correct(9.2)
+        installments_is_correct(9.2, 10000)
 
 
 def test_installments_is_correct_negative():
     with pytest.raises(InvalidInstallmentsError):
-        installments_is_correct(-9)
+        installments_is_correct(-9, 10000)
 
 
 def test_installments_is_correct_string():
     with pytest.raises(InvalidInstallmentsError):
-        installments_is_correct('Little Mermaid')
+        installments_is_correct('Little Mermaid', 10000)
+
+
+def test_installments_is_correct_to_bit():
+    with pytest.raises(ToBigInstallmentsError):
+        installments_is_correct(2048, 100)
 
 
 def test_create_loan():
