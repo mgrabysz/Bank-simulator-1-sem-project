@@ -1,6 +1,12 @@
-from bank_classes import Bank
+from bank_classes import (
+    Bank,
+    InvalidNameError,
+    InvalidValueError,
+    InvalidRateError,
+    InvalidInstallmentsError
+)
 from bank_interface import Interface
-from bank_io import load_from_file
+from bank_io import load_from_file, MalformedDataError
 import argparse
 import sys
 
@@ -13,9 +19,20 @@ def main(arguments):
     bank = Bank()
 
     if args.load:
-        path = args.load
-        initial_loans = load_from_file(path)
-        bank.give_loans_from_initial_data(initial_loans)
+        try:
+            path = args.load
+            initial_loans = load_from_file(path)
+            bank.give_loans_from_initial_data(initial_loans)
+        except (
+            InvalidNameError,
+            InvalidValueError,
+            InvalidRateError,
+            InvalidInstallmentsError,
+            MalformedDataError
+        ) as e:
+            print(e)
+            print(f'File {path} contains invalid data')
+            sys.exit()
 
     interface = Interface(bank)
     interface.simulate()
