@@ -10,6 +10,7 @@ from bank_io import (
     take_correct_value_from_user,
     take_correct_rate_from_user,
     take_correct_installments_from_user,
+    available
 )
 from bank_classes import NoBudgetError
 import sys
@@ -51,7 +52,7 @@ class Interface():
         """
         print('')
         print(month_year(self.bank))
-        print('Choose number of action:')
+        print('Choose a number of action:')
         print('1. Quit')
         print('2. Display general info')
         print('3. Give a new loan')
@@ -90,7 +91,7 @@ class Interface():
         display = general_info_to_print(general_info)
         print('')
         print(display)
-        print('Choose number of action:')
+        print('Choose a number of action:')
         print('1. Back to main menu')
         print('2. Display specific info about client')
 
@@ -109,7 +110,7 @@ class Interface():
         Displays specific info about client
         Options from here:
         1. Back to main menu
-        2. Display specific info about one of loans
+        2. Display specific info about one of the loans
         """
         info_about_clients = self.bank.info_about_clients()
         if not info_about_clients:
@@ -130,15 +131,15 @@ class Interface():
                 to_display = info_about_single_client_to_print(client_info)
             except (ValueError, KeyError):
                 print(self.please)
-                print(f'Available options are {available_options}')
+                print(available(available_options))
                 continue
             break
 
         print('')
         print(to_display)
-        print('Choose number of action:')
+        print('Choose a number of action:')
         print('1. Back to main menu')
-        print('2. Display specific info about one of loans')
+        print('2. Display specific info about one of the loans')
         while True:
             action = input('> ')
             if action == '1':
@@ -155,7 +156,7 @@ class Interface():
         for index in loans_info:
             available_options.append(index)
         print('')
-        print('Choose number of loan:')
+        print('Choose a number of loan:')
         while True:
             try:
                 choice = input('> ')
@@ -163,7 +164,7 @@ class Interface():
                 to_display = info_about_loan_to_print(client_info, number)
             except (ValueError, KeyError):
                 print(self.please)
-                print(f'Available options are {available_options}')
+                print(available(available_options))
                 continue
             break
 
@@ -187,7 +188,7 @@ class Interface():
             return
 
         print('')
-        print('Choose number of action:')
+        print('Choose a number of action:')
         print('1. Give loan to a new client (create client)')
         print('2. Give loan to a client who is already our customer')
         while True:
@@ -245,7 +246,7 @@ class Interface():
                     raise IncorrectInputError
             except (ValueError, IncorrectInputError):
                 print(self.please)
-                print(f'Available options are {available_options}')
+                print(available(available_options))
                 continue
             break
 
@@ -271,7 +272,7 @@ class Interface():
         2. Moves on desired number of months
         """
         print('')
-        print('Enter number of months to skip:')
+        print('Enter a number of months to skip:')
         while True:
             number = input('> ')
             try:

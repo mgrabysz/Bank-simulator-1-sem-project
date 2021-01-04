@@ -197,6 +197,13 @@ def take_correct_installments_from_user():
             continue
 
 
+def available(available_options):
+    if len(available_options) == 1:
+        return f'Available option is {available_options[0]}'
+    else:
+        return f'Available options are {available_options}'
+
+
 def read_from_csv(file_handle):
     """
     Reads data from csv file handle and returs a list of dictionaries
