@@ -18,10 +18,11 @@ import pytest
 
 def test_create_bank(monkeypatch):
 
-    def get_date_battle_of_grunwald():
+    def get_date_battle_of_grunwald(_):
         return date(1410, 7, 15)
     monkeypatch.setattr(
-        'bank_classes.get_first_day_of_month_date',
+        Bank,
+        'get_first_day_of_month_date',
         get_date_battle_of_grunwald
         )
 
@@ -301,10 +302,11 @@ def test_collect_all_payments_multiple_times():
 
 def test_one_month_forward(monkeypatch):
 
-    def get_date_battle_of_grunwald():
+    def get_date_battle_of_grunwald(_):
         return date(1410, 7, 15)
     monkeypatch.setattr(
-        'bank_classes.get_first_day_of_month_date',
+        Bank,
+        'get_first_day_of_month_date',
         get_date_battle_of_grunwald
         )
 
@@ -315,10 +317,11 @@ def test_one_month_forward(monkeypatch):
 
 
 def test_one_month_forward_new_year(monkeypatch):
-    def get_date_mickiewicz_birthday():
+    def get_date_mickiewicz_birthday(_):
         return date(1798, 12, 24)
     monkeypatch.setattr(
-        'bank_classes.get_first_day_of_month_date',
+        Bank,
+        'get_first_day_of_month_date',
         get_date_mickiewicz_birthday
         )
 
@@ -390,10 +393,11 @@ def test_info_about_single_client():
 
 
 def test_make_monthly_settlement(monkeypatch):
-    def get_date_battle_of_grunwald():
+    def get_date_battle_of_grunwald(_):
         return date(1410, 7, 15)
     monkeypatch.setattr(
-        'bank_classes.get_first_day_of_month_date',
+        Bank,
+        'get_first_day_of_month_date',
         get_date_battle_of_grunwald
         )
 
@@ -427,10 +431,11 @@ def test_expected_income():
 
 
 def test_general_info(monkeypatch):
-    def get_date_battle_of_grunwald():
+    def get_date_battle_of_grunwald(_):
         return date(1410, 7, 15)
     monkeypatch.setattr(
-        'bank_classes.get_first_day_of_month_date',
+        Bank,
+        'get_first_day_of_month_date',
         get_date_battle_of_grunwald
         )
     bank = Bank()
