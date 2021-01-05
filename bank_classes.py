@@ -31,6 +31,11 @@ class NoBudgetError(Exception):
     pass
 
 
+class YearOutOfRangeError(Exception):
+    def __init__(self):
+        super().__init__("Even Cyberpunk delay didn't last that long")
+
+
 def value_is_correct(value):
     """
     Returns True if given value is a number equal or greater than 100
@@ -75,7 +80,8 @@ def installments_is_correct(installments, value):
     if installments < 1:
         raise InvalidInstallmentsError
 
-    value = int(value)
+    value = Decimal(value)
+    # value always is tested before installments, so is correct
     if ((installments ** 2) > (200 * value)):
         raise ToBigInstallmentsError
 
@@ -115,13 +121,19 @@ class Bank():
         self.id_count = 1
         self.current_date = self.get_first_day_of_month_date()
 
+    def clients_loans(self):
+        return self._clients_loans
+
+    def clients_id(self):
+        return self._clients_id
+
+    def budget(self):
+        return self._budget
+
     def get_first_day_of_month_date(self):
         my_date = date.today()
         first_day = my_date.replace(day=1)
         return first_day
-
-    def budget(self):
-        return self._budget
 
     def increase_budget(self, value):
         """
@@ -144,12 +156,6 @@ class Bank():
         self._budget = self._budget.quantize(Decimal('.01'))
         if self.budget() <= 0:
             raise NoBudgetError
-
-    def clients_loans(self):
-        return self._clients_loans
-
-    def clients_id(self):
-        return self._clients_id
 
     def add_new_client(self, client_name):
         """
@@ -225,12 +231,15 @@ class Bank():
         """
         Changes current_date to one month forward
         """
-        cur_date = self.current_date
-        if cur_date.month == 12:
-            forward = cur_date.replace(month=1, year=cur_date.year+1)
-        else:
-            forward = cur_date.replace(month=cur_date.month+1)
-        self.current_date = forward
+        try:
+            cur_date = self.current_date
+            if cur_date.month == 12:
+                forward = cur_date.replace(month=1, year=cur_date.year+1)
+            else:
+                forward = cur_date.replace(month=cur_date.month+1)
+            self.current_date = forward
+        except ValueError:
+            raise YearOutOfRangeError
 
     def make_monthly_settlement(self):
         """

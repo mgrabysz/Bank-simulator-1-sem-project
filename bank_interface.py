@@ -12,7 +12,7 @@ from bank_io import (
     take_correct_installments_from_user,
     available
 )
-from bank_classes import NoBudgetError
+from bank_classes import NoBudgetError, YearOutOfRangeError
 import sys
 
 
@@ -114,7 +114,7 @@ class Interface():
         """
         info_about_clients = self.bank.info_about_clients()
         if not info_about_clients:
-            print('There is no one to display info about')
+            print('\nThere is no one to display info about')
             return
 
         available_options = []
@@ -279,8 +279,14 @@ class Interface():
                 number = int(number)
                 if number < 1:
                     raise IncorrectInputError
+                if number > 10000:
+                    raise YearOutOfRangeError
             except (ValueError, IncorrectInputError):
                 print("Number of months has to be a positive integer")
+                continue
+            except YearOutOfRangeError as e:
+                print('Please, choose less distant future')
+                print(e)
                 continue
             break
         for _ in range(number):
