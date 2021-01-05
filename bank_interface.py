@@ -5,7 +5,7 @@ from bank_io import (
     general_info_to_print,
     greeting,
     game_over,
-    month_year,
+    month_year_info,
     take_correct_name_from_user,
     take_correct_value_from_user,
     take_correct_rate_from_user,
@@ -51,7 +51,7 @@ class Interface():
         5. Move on multiple months
         """
         print('')
-        print(month_year(self.bank))
+        print(month_year_info(self.bank))
         print('Choose a number of action:')
         print('1. Quit')
         print('2. Display general info')

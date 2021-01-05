@@ -128,7 +128,7 @@ def game_over():
     return game_over
 
 
-def month_year(bank):
+def month_year_info(bank):
     """
     Returns date in format 'April 1999'
     """
