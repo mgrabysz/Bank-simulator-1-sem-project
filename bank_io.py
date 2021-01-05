@@ -1,8 +1,3 @@
-# Świadomie zrezygnowałem z testowania większości funkcji z tego modułu.
-# Zwracają wielolinijkowe stringi, których układ łatwiej jest przejrzeć
-# "ocznie", za to poprawność danych jest sprawdzana innymi testami należącymi
-# do modułu test_bank_classes
-
 from bank_classes import (
     value_is_correct,
     rate_is_correct,
