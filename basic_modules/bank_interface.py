@@ -12,7 +12,7 @@ from basic_modules.bank_io import (
     take_correct_installments_from_user,
     available
 )
-from basic_modules.bank_classes import NoBudgetError, YearOutOfRangeError
+from basic_modules.bank_exceptions import NoBudgetError, YearOutOfRangeError
 import sys
 
 

@@ -1,13 +1,15 @@
-from basic_modules.bank_classes import (
-    value_is_correct,
-    rate_is_correct,
-    installments_is_correct,
-    name_is_correct,
+from basic_modules.bank_exceptions import (
     InvalidValueError,
     InvalidRateError,
     InvalidInstallmentsError,
     InvalidNameError,
     ToBigInstallmentsError
+)
+from basic_modules.bank_checking_functions import (
+    value_is_correct,
+    rate_is_correct,
+    installments_is_correct,
+    name_is_correct,
 )
 import csv
 

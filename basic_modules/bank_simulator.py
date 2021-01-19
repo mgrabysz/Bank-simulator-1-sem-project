@@ -1,5 +1,5 @@
-from basic_modules.bank_classes import (
-    Bank,
+from basic_modules.bank_classes import Bank
+from basic_modules.bank_exceptions import (
     InvalidNameError,
     InvalidValueError,
     InvalidRateError,

@@ -2,7 +2,7 @@ from basic_modules.bank_io import (
     read_from_csv,
     MalformedDataError,
 )
-from basic_modules.bank_classes import (
+from basic_modules.bank_exceptions import (
     InvalidRateError,
     InvalidNameError,
 )
