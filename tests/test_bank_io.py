@@ -1,8 +1,8 @@
-from bank_io import (
+from basic_modules.bank_io import (
     read_from_csv,
     MalformedDataError,
 )
-from bank_classes import (
+from basic_modules.bank_classes import (
     InvalidRateError,
     InvalidNameError,
 )

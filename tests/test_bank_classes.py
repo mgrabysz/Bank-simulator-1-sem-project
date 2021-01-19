@@ -1,4 +1,4 @@
-from bank_classes import (
+from basic_modules.bank_classes import (
     Bank,
     Loan,
     Client,

@@ -1,4 +1,4 @@
-from bank_classes import (
+from basic_modules.bank_classes import (
     Bank,
     InvalidNameError,
     InvalidValueError,
@@ -6,8 +6,8 @@ from bank_classes import (
     InvalidInstallmentsError,
     ToBigInstallmentsError
 )
-from bank_interface import Interface
-from bank_io import load_from_file, MalformedDataError
+from basic_modules.bank_interface import Interface
+from basic_modules.bank_io import load_from_file, MalformedDataError
 import argparse
 import sys
 

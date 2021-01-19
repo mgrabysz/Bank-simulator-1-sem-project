@@ -1,4 +1,4 @@
-from bank_classes import (
+from basic_modules.bank_classes import (
     value_is_correct,
     rate_is_correct,
     installments_is_correct,

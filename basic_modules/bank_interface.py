@@ -1,4 +1,4 @@
-from bank_io import (
+from basic_modules.bank_io import (
     info_about_single_client_to_print,
     info_about_loan_to_print,
     info_about_clients_to_print,
@@ -12,7 +12,7 @@ from bank_io import (
     take_correct_installments_from_user,
     available
 )
-from bank_classes import NoBudgetError, YearOutOfRangeError
+from basic_modules.bank_classes import NoBudgetError, YearOutOfRangeError
 import sys
 
 
